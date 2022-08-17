@@ -32,7 +32,11 @@ public class DroneService implements IDroneService {
 
     @Override
     public Drone getDrone(String serialNumber) throws ResourceNotFoundException {
-        return droneRepository.findBySerialNumber(serialNumber);
+        Drone drone = droneRepository.findBySerialNumber(serialNumber);
+        if (drone == null) {
+            throw new ResourceNotFoundException("Drone not found.");
+        }
+        return drone;
     }
 
     @Override
@@ -41,30 +45,42 @@ public class DroneService implements IDroneService {
     }
 
     @Override
-    public Drone loadDrone(Drone drone, Set<Medication> medications){
+    public Drone loadDrone(String serialNumber, Set<Medication> medications) throws ResourceNotFoundException {
+        Drone drone = this.getDrone(serialNumber);
         int sumOfMedicationWeights = this.getTotalWeightOfItems(medications);
 
-        if (drone.getBattery() < 25) {
+        if (drone == null) {
+            throw new ResourceNotFoundException("Drone not found.");
+        } else if (drone.getBattery() < 25) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Drone battery is low.");
-        } else if (drone.getWeight() < sumOfMedicationWeights) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Medication weight exceed limit");
+        } else if (drone.getWeightLimit() < sumOfMedicationWeights) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Medication weight exceeded limit");
+        } else if (drone.getState() != State.IDLE) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This drone is not available");
         }
 
+        // Simulate the delivery process. For every delivery, the battery reduces by 5%
         drone.setState(State.LOADING);
         drone.setMedications(medications);
         drone.setState(State.LOADED);
-        droneRepository.save(drone);
-        return drone;
+        drone.setState(State.DELIVERING);
+        drone.setBattery(drone.getBattery() - 5);
+        drone.setState(State.DELIVERED);
+        drone.setState(State.IDLE);
+        return droneRepository.save(drone);
     }
 
     @Override
-    public Map<String, Object> getLoadedMedications(String serialNumber) {
+    public Map<String, Object> getLoadedMedications(String serialNumber) throws ResourceNotFoundException {
         Map<String, Object> res = new HashMap<>();
         Drone drone = droneRepository.findBySerialNumber(serialNumber);
 
         res.put("quantity", drone.getMedications().size());
         res.put("medications", drone.getMedications());
 
+        if (drone == null) {
+            throw new ResourceNotFoundException("Drone not found.");
+        }
         return res;
     }
 
@@ -74,8 +90,11 @@ public class DroneService implements IDroneService {
     }
 
     @Override
-    public int getBatteryLevel(String serialNumber){
+    public int getBatteryLevel(String serialNumber) throws ResourceNotFoundException{
         Drone drone = droneRepository.findBySerialNumber(serialNumber);
+        if (drone == null) {
+            throw new ResourceNotFoundException("Drone not found.");
+        }
         return drone.getBattery();
     }
 

@@ -17,13 +17,13 @@ public interface IDroneService {
 
     List<Drone> getAllDrones();
 
-    Drone loadDrone(Drone drone, Set<Medication> medications);
+    Drone loadDrone(String serialNumber, Set<Medication> medications) throws ResourceNotFoundException;
 
-    Map<String, Object> getLoadedMedications(String serialNumber);
+    Map<String, Object> getLoadedMedications(String serialNumber) throws ResourceNotFoundException;
 
     List<Drone> getAvailableDrones();
 
-    int getBatteryLevel(String serialNumber);
+    int getBatteryLevel(String serialNumber) throws ResourceNotFoundException;
 
     int getTotalWeightOfItems(Set<Medication> medications);
 }
