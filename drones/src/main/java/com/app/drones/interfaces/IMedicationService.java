@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IMedicationService {
 
-    Optional<Medication> getMedication(String id);
+    Optional<Medication> getMedication(Long id);
 
     Medication createMedication(Medication medication);
     List<Medication> getAllMedications();
