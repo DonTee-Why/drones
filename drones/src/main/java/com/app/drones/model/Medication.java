@@ -1,76 +1,42 @@
 package com.app.drones.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Set;
 
+@Entity
+@Table(name = "medications")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Medication {
 
     @Id
-    @GeneratedValue
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToMany(mappedBy = "drone_id", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "drone_id")
     private Drone drone;
 
+    @NotNull
     private String name;
 
     @NotNull
     private int weight;
 
     @NotNull
-    @Min(0)
-    @Max(100)
-    @Pattern(regexp = "^[A-Za-z0-9_]+$", message = "Invalid code")
+    @Pattern(regexp = "^[A-Z0-9_]+$", message = "Invalid code")
     private String code;
 
     @NotNull
     @Pattern(regexp = "^[^\\\\s]+(\\.(jpe?g|png|gif|bmp))$", message = "Invalid image string")
     private String image;
 
-    public Medication(String name, int weight, String code, String image) {
-        this.name = name;
-        this.weight = weight;
-        this.code = code;
-        this.image = image;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }
