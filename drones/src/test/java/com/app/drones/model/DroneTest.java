@@ -11,19 +11,20 @@ class DroneTest {
     @Test
     void create_new_drone(){
         Drone drone = new Drone();
-        Medication medication = new Medication(
-                "Medication1",
-                75,
-                "Code_1234",
-                "Test_Image.jpeg"
-        );
-        List<Medication> medications = new ArrayList<>();
+        Medication medication = new Medication();
+//        medication.setId(UUID.randomUUID().);
+        medication.setName("Medication1");
+        medication.setWeight(75);
+        medication.setCode("Code_1234");
+        medication.setImage("Test_Image.jpeg");
+
+        Set<Medication> medications = new HashSet<>();
         
         medications.add(medication);
         drone.setSerialNumber(UUID.randomUUID().toString());
         drone.setModel(Model.MIDDLEWEIGHT);
         drone.setBattery(75);
-        drone.setWeight(400);
+        drone.setWeightLimit(400);
         drone.setState(State.IDLE);
         drone.setMedications(medications);
 

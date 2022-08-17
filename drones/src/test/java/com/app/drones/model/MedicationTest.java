@@ -8,15 +8,10 @@ class MedicationTest {
 
     @Test
     void create_new_drone(){
-        Medication medication = new Medication(
-                "Medication1",
-                75,
-                "Code_1234",
-                "Test_Image.jpeg"
-        );
+        Medication medication = new Medication();
         medication.setName("Medication1");
         medication.setWeight(48);
-        medication.setCode("Code-1234");
+        medication.setCode("Code_1234");
         medication.setImage("Test_Image.jpeg");
 
         assertNotNull(medication);
