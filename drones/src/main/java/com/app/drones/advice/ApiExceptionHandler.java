@@ -45,10 +45,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<Map<String, String>> handleForbidden(HttpClientErrorException.Forbidden exception){
+    public ResponseEntity<Map<String, String>> handleForbidden(ResponseStatusException exception){
         Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", exception.getMessage());
+        errorResponse.put("error", exception.getReason());
 
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 }
