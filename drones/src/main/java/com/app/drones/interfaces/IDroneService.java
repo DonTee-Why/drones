@@ -1,13 +1,11 @@
 package com.app.drones.interfaces;
 
+import com.app.drones.exception.ResourceNotFoundException;
 import com.app.drones.model.Drone;
 import com.app.drones.model.Medication;
-import com.app.drones.model.State;
-import com.app.drones.repository.DroneRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -15,15 +13,17 @@ public interface IDroneService {
 
     Drone registerDrone(Drone drone);
 
-    Drone getDrone(String serialNumber);
+    Drone getDrone(String serialNumber) throws ResourceNotFoundException;
 
     List<Drone> getAllDrones();
 
-    Drone loadDrone(Drone drone, List<Medication> medications);
+    Drone loadDrone(Drone drone, Set<Medication> medications);
 
-    List<Medication> checkLoadedMedications(String serialNumber);
+    Map<String, Object> getLoadedMedications(String serialNumber);
 
     List<Drone> getAvailableDrones();
 
-    int checkBatteryLevel(String serialNumber);
+    int getBatteryLevel(String serialNumber);
+
+    int getTotalWeightOfItems(Set<Medication> medications);
 }
