@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class Drone {
     @JoinColumn(name = "drone_id", referencedColumnName = "serial_number")
     private Set<Medication> medications;
 
-    @NotNull
+    @NotNull(message = "Weight limit must not be null")
     @Min(value = 1, message = "Invalid Weight")
     @Max(value = 500,message = "Exceeded Weight Limit (500g)")
     @Column(name = "weight_limit")
@@ -40,11 +41,11 @@ public class Drone {
     @Max(100)
     private int battery;
 
-    @NotNull
+    @NotNull(message = "Model must not be null")
     @Enumerated(value = EnumType.STRING)
     private Model model;
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
-    private State state;
+    private State state = State.IDLE;
 }

@@ -25,11 +25,10 @@ class DroneTest {
         drone.setModel(Model.MIDDLEWEIGHT);
         drone.setBattery(75);
         drone.setWeightLimit(400);
-        drone.setState(State.IDLE);
         drone.setMedications(medications);
 
-        System.out.println(drone.getSerialNumber());
         assertNotNull(drone);
         assertEquals("MIDDLEWEIGHT", drone.getModel().name());
+        assertEquals("IDLE", drone.getState().name());
     }
 }
