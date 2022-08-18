@@ -44,7 +44,7 @@ mvn spring-boot:run
 
 ## Database
 
-The project uses H2 database, an in-memory database. The database has been configured in the `src/main/resources/application.properties` file. Also needed data is preloaded into the database via the `src/main/resources/data.sql` file.
+The project uses H2 database, an in-memory database. The database settings has been configured in the `src/main/resources/application.properties` file. Also needed data is preloaded into the database via the `src/main/resources/data.sql` file.
 
 ## Testing
 
