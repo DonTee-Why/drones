@@ -30,18 +30,19 @@ public class DroneController {
         this.medicationService = medicationService;
     }
 
+    // GET http://locallhost:8080/drones
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<Drone> getAllDrones(){
+        return droneService.getAllDrones();
+    }
+
     // POST http://locallhost:8080/drones
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Drone register(@Valid @RequestBody Drone drone){
         return droneService.registerDrone(drone);
-    }
-
-    // GET http://locallhost:8080/drones/
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public List<Drone> getAllDrones(){
-        return droneService.getAllDrones();
     }
 
     // GET http://locallhost:8080/drones/123-23234-23232332
@@ -70,6 +71,13 @@ public class DroneController {
     @GetMapping("/available")
     public List<Drone> getAvailableDrones(){
         return droneService.getAvailableDrones();
+    }
+
+    // GET http://locallhost:8080/drones/battery
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/battery/{serialNumber}")
+    public int getBatteryLevel(@PathVariable String serialNumber) throws ResourceNotFoundException {
+        return droneService.getBatteryLevel(serialNumber);
     }
 
 }
