@@ -40,7 +40,7 @@ public class ApiExceptionHandler {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", exception.getMessage());
 
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(ResponseStatusException.class)

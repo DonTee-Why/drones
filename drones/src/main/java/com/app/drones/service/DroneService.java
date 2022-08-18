@@ -66,7 +66,6 @@ public class DroneService implements IDroneService {
         drone.setState(State.DELIVERING);
         drone.setBattery(drone.getBattery() - 5);
         drone.setState(State.DELIVERED);
-        drone.setState(State.IDLE);
         return droneRepository.save(drone);
     }
 
@@ -74,13 +73,13 @@ public class DroneService implements IDroneService {
     public Map<String, Object> getLoadedMedications(String serialNumber) throws ResourceNotFoundException {
         Map<String, Object> res = new HashMap<>();
         Drone drone = droneRepository.findBySerialNumber(serialNumber);
+        if (drone == null) {
+            throw new ResourceNotFoundException("Drone not found.");
+        }
 
         res.put("quantity", drone.getMedications().size());
         res.put("medications", drone.getMedications());
 
-        if (drone == null) {
-            throw new ResourceNotFoundException("Drone not found.");
-        }
         return res;
     }
 
@@ -101,8 +100,7 @@ public class DroneService implements IDroneService {
     @Override
     public int getTotalWeightOfItems(Set<Medication> medications) {
         int sum = 0;
-        for (Medication medication :
-                medications) {
+        for (Medication medication : medications) {
             sum += medication.getWeight();
         }
         return sum;
