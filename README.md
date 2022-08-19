@@ -1,5 +1,8 @@
 # Drones
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/41ea406d79eb4eacb5ac3a9be0787321)](https://app.codacy.com/gh/DonTee-Why/drones?utm_source=github.com&utm_medium=referral&utm_content=DonTee-Why/drones&utm_campaign=Badge_Grade_Settings)
+
+
 Just as the mobile phone allowed developing countries to leapfrog older technologies for personal communication, drones have the potential to leapfrog traditional transportation infrastructure.
 
 Useful drone functions include delivery of small items that are (urgently) needed in locations with difficult access. This project simulates these functions. For this project, the items being delivered are medications.
