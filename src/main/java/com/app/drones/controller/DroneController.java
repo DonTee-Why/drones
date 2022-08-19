@@ -5,8 +5,6 @@ import com.app.drones.interfaces.IDroneService;
 import com.app.drones.interfaces.IMedicationService;
 import com.app.drones.model.Drone;
 import com.app.drones.model.Medication;
-import com.app.drones.service.DroneService;
-import com.app.drones.service.MedicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

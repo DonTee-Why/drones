@@ -1,9 +1,7 @@
 package com.app.drones.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -26,6 +24,7 @@ public class Drone {
 
     @OneToMany
     @JoinColumn(name = "drone_id", referencedColumnName = "serial_number")
+    @ToString.Exclude
     private Set<Medication> medications;
 
     @NotNull(message = "Weight limit must not be null")

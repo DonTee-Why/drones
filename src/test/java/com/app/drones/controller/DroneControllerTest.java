@@ -55,19 +55,19 @@ class DroneControllerTest {
         this.drone.setWeightLimit(400);
 
         // Create medications
-        this.medication1.setId(Long.valueOf(1));
+        this.medication1.setId(1L);
         this.medication1.setName("Medicine_123");
         this.medication1.setWeight(100);
         this.medication1.setCode("MED_1");
         this.medication1.setImage("med1.jpg");
 
-        this.medication2.setId(Long.valueOf(2));
+        this.medication2.setId(2L);
         this.medication2.setName("Medicine_124");
         this.medication2.setWeight(35);
         this.medication2.setCode("MED_12");
         this.medication2.setImage("med2.jpg");
 
-        this.medication3.setId(Long.valueOf(3));
+        this.medication3.setId(3L);
         this.medication3.setName("Medicine_122");
         this.medication3.setWeight(50);
         this.medication3.setCode("MED_3");
@@ -84,19 +84,21 @@ class DroneControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         String resultString = mvcResult.getResponse().getContentAsString();
-        ArrayList<Drone> expected = objectMapper.readValue(resultString, ArrayList.class);
+        ArrayList<?> expected = objectMapper.readValue(resultString, ArrayList.class);
         assertEquals(expected.getClass(), ArrayList.class);
     }
 
     @Test
     @DisplayName(value = "Register Drone Returns Status 200")
-    void testRegistersReturnsStatus200() throws Exception {
+    void testRegistersReturnsStatus201() throws Exception {
         String body = objectMapper.writeValueAsString(this.drone);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(body))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andReturn();
+        assertEquals(201, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -336,12 +338,6 @@ class DroneControllerTest {
     @Test
     @DisplayName(value = "Get Loaded Medication Returns Status 404 When Serial Number Is Wrong")
     void testGetLoadedMedicationReturnsWithStatus404WhenSerialNumberIsWrong() throws Exception {
-        // Create a list of medications
-        Set<Medication> medications = new HashSet<>();
-        medications.add(medication1);
-        medications.add(medication2);
-        medications.add(medication3);
-
         // Test get loaded medications endpoint with the serial number as parameter
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/drones/loaded/{serialNumber}", 123-1234-12345)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -354,12 +350,6 @@ class DroneControllerTest {
     @Test
     @DisplayName(value = "Get Available Drones Returns Available Drones Status 200")
     void testGetAvailableReturnsAvailableDronesWithStatus200() throws Exception {
-        // Create a list of medications
-        Set<Medication> medications = new HashSet<>();
-        medications.add(medication1);
-        medications.add(medication2);
-        medications.add(medication3);
-
         // Test get loaded medications endpoint with the serial number as parameter
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/drones/available")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -368,7 +358,8 @@ class DroneControllerTest {
                 .andReturn();
         String resultString = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(resultString);
-        ArrayList<Drone> availableDrones = objectMapper.convertValue(jsonNode, new TypeReference<ArrayList<Drone>>() {});
+        ArrayList<Drone> availableDrones = objectMapper.convertValue(jsonNode, new TypeReference<>() {
+        });
         for (Drone drone : availableDrones) {
             assertEquals(drone.getState(), State.IDLE);
         }
@@ -378,12 +369,6 @@ class DroneControllerTest {
     @Test
     @DisplayName(value = "Get Battery Level Returns Status 200")
     void testGetBatteryLevelReturnsWithStatus200() throws Exception {
-        // Create a list of medications
-        Set<Medication> medications = new HashSet<>();
-        medications.add(medication1);
-        medications.add(medication2);
-        medications.add(medication3);
-
         this.drone.setBattery(55);
 
         String body = objectMapper.writeValueAsString(drone);
@@ -410,12 +395,6 @@ class DroneControllerTest {
     @Test
     @DisplayName(value = "Get Battery Level Returns 404 Status When Serial Number Is Wrong")
     void testGetBatteryLevelReturnsWith404StatusWhenSerialNumberIsWrong() throws Exception {
-        // Create a list of medications
-        Set<Medication> medications = new HashSet<>();
-        medications.add(medication1);
-        medications.add(medication2);
-        medications.add(medication3);
-
         this.drone.setBattery(55);
 
         // Test get loaded medications endpoint with the serial number as parameter

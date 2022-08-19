@@ -21,9 +21,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleInvalidArgument(MethodArgumentNotValidException exception){
         Map<String, Object> errorResponse = new HashMap<>();
         Map<String, String> fieldErrors = new HashMap<>();
-        exception.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        });
+        exception.getBindingResult().getFieldErrors().forEach(fieldError -> fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 
         errorResponse.put("message", "Invalid input");
         errorResponse.put("errors", fieldErrors);

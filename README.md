@@ -21,7 +21,7 @@ Useful drone functions include delivery of small items that are (urgently) neede
 
 - [JDK 1.8](https://www.oracle.com/java/technologies/downloads) or later
 - [Maven 3.2+](https://maven.apache.org/download.cgi)
-- You can also inport the project into you IDE
+- You can also import the project into you IDE
 
 1. Clone the project from the repository and then cd into the root directory
 

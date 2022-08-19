@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 
 public class CheckBatteryLevelEvent extends ApplicationEvent {
-    private Drone drone;
+    private final Drone drone;
 
     public CheckBatteryLevelEvent(Object source, Drone drone) {
         super(source);

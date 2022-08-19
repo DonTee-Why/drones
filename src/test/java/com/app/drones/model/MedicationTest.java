@@ -11,7 +11,7 @@ class MedicationTest {
     @DisplayName(value = "Create New Medication")
     void createNewDrone(){
         Medication medication = new Medication();
-        medication.setId(Long.valueOf(1));
+        medication.setId(1L);
         medication.setName("Medication1");
         medication.setWeight(48);
         medication.setCode("Code_1234");

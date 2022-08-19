@@ -1,7 +1,6 @@
 package com.app.drones.service;
 
 import com.app.drones.interfaces.IMedicationService;
-import com.app.drones.model.Drone;
 import com.app.drones.model.Medication;
 import com.app.drones.repository.MedicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
