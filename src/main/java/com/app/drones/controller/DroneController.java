@@ -31,7 +31,6 @@ public class DroneController {
     }
 
     // GET http://locallhost:8080/drones
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Drone> getAllDrones(){
