@@ -11,7 +11,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,6 +36,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource(locations = "classpath:application-test.properties")
 @AutoConfigureMockMvc
 class DroneControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     Drone drone = new Drone();
     Medication medication1 = new Medication();
@@ -70,12 +75,6 @@ class DroneControllerTest {
 
     }
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
     @DisplayName(value = "Get All Drones Returns List With Status 200")
     void testGetAllDronesReturnsListWithStatus200() throws Exception {
@@ -105,11 +104,13 @@ class DroneControllerTest {
     void testRegisterReturnsStatus400WhenRequiredParamsAreOmitted() throws Exception {
         Drone drone = new Drone();
         String body = objectMapper.writeValueAsString(drone);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones")
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(body))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+        assertEquals(400, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -126,19 +127,23 @@ class DroneControllerTest {
         Drone newDrone = objectMapper.readValue(resultString, Drone.class);
         String droneId = newDrone.getSerialNumber();
         // Test get drone endpoint with the serial number as parameter
-        mockMvc.perform(MockMvcRequestBuilders.get("/drones/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/drones/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
     @DisplayName(value = "Get Drone Returns Status 404 When Serial Number Is Wrong")
     void testGetDroneReturnsWithStatus404WhenSerialNumberIsWrong() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/drones/{serialNumber}", 12223 - 123 - 4343)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/drones/{serialNumber}", 12223 - 123 - 4343)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        assertEquals(404, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -162,13 +167,15 @@ class DroneControllerTest {
         String droneId = newDrone.getSerialNumber();
         // Test load drone endpoint with the serial number as parameter
         String medicationBody = objectMapper.writeValueAsString(medications);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(medicationBody))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.medications",
-                        Matchers.notNullValue(List.class)));
+                        Matchers.notNullValue(List.class)))
+                .andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -182,11 +189,13 @@ class DroneControllerTest {
 
         // Test load drone endpoint with the serial number as parameter
         String medicationBody = objectMapper.writeValueAsString(medications);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", 2233 - 1234 - 2222)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", 2233 - 1234 - 2222)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(medicationBody))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        assertEquals(404, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -213,11 +222,13 @@ class DroneControllerTest {
         String droneId = newDrone.getSerialNumber();
         // Test load drone endpoint with the serial number as parameter
         String medicationBody = objectMapper.writeValueAsString(medications);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(medicationBody))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andReturn();
+        assertEquals(403, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -243,11 +254,13 @@ class DroneControllerTest {
         String droneId = newDrone.getSerialNumber();
         // Test load drone endpoint with the serial number as parameter
         String medicationBody = objectMapper.writeValueAsString(medications);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(medicationBody))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andReturn();
+        assertEquals(403, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -273,11 +286,13 @@ class DroneControllerTest {
         String droneId = newDrone.getSerialNumber();
         // Test load drone endpoint with the serial number as parameter
         String medicationBody = objectMapper.writeValueAsString(medications);
-        mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/drones/load/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(medicationBody))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isForbidden())
+                .andReturn();
+        assertEquals(403, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -308,12 +323,14 @@ class DroneControllerTest {
                         .content(medicationBody));
 
         // Test get loaded medications endpoint with the serial number as parameter
-        mockMvc.perform(MockMvcRequestBuilders.get("/drones/loaded/{serialNumber}", droneId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/drones/loaded/{serialNumber}", droneId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
-                        Matchers.is(3)));
+                        Matchers.is(3)))
+                .andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
@@ -326,14 +343,16 @@ class DroneControllerTest {
         medications.add(medication3);
 
         // Test get loaded medications endpoint with the serial number as parameter
-        mockMvc.perform(MockMvcRequestBuilders.get("/drones/loaded/{serialNumber}", 123-1234-12345)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/drones/loaded/{serialNumber}", 123-1234-12345)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        assertEquals(404, mvcResult.getResponse().getStatus());
     }
 
     @Test
-    @DisplayName(value = "Get Available Returns Available Drones Status 200")
+    @DisplayName(value = "Get Available Drones Returns Available Drones Status 200")
     void testGetAvailableReturnsAvailableDronesWithStatus200() throws Exception {
         // Create a list of medications
         Set<Medication> medications = new HashSet<>();
@@ -347,14 +366,13 @@ class DroneControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-
         String resultString = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(resultString);
         ArrayList<Drone> availableDrones = objectMapper.convertValue(jsonNode, new TypeReference<ArrayList<Drone>>() {});
-
         for (Drone drone : availableDrones) {
             assertEquals(drone.getState(), State.IDLE);
         }
+        assertEquals(200, result.getResponse().getStatus());
     }
 
     @Test
@@ -386,7 +404,7 @@ class DroneControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("55"))
                 .andReturn();
-
+        assertEquals(200, result.getResponse().getStatus());
     }
 
     @Test
@@ -406,7 +424,7 @@ class DroneControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn();
+        assertEquals(404, result.getResponse().getStatus());
 
     }
-
 }

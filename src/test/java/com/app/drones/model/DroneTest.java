@@ -1,5 +1,6 @@
 package com.app.drones.model;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -9,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class DroneTest {
 
     @Test
-    void create_new_drone(){
+    @DisplayName(value = "Create New Drone")
+    void CreateNewDrone(){
         Drone drone = new Drone();
         Medication medication = new Medication();
 //        medication.setId(UUID.randomUUID().);
@@ -30,5 +32,6 @@ class DroneTest {
         assertNotNull(drone);
         assertEquals("MIDDLEWEIGHT", drone.getModel().name());
         assertEquals("IDLE", drone.getState().name());
+        assertInstanceOf(Drone.class, drone);
     }
 }

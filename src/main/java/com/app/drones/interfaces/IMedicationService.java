@@ -1,6 +1,5 @@
 package com.app.drones.interfaces;
 
-import com.app.drones.model.Drone;
 import com.app.drones.model.Medication;
 
 import java.util.List;

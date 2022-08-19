@@ -1,4 +1,3 @@
-
 # Drones
 
 Just as the mobile phone allowed developing countries to leapfrog older technologies for personal communication, drones have the potential to leapfrog traditional transportation infrastructure.
@@ -23,7 +22,6 @@ Useful drone functions include delivery of small items that are (urgently) neede
 - You can also inport the project into you IDE
 
 1. Clone the project from the repository and then cd into the root directory
-
 
 ```sh
 git clone https://gitlab.com/DonTee-Why/drones

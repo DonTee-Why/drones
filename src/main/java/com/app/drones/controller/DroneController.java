@@ -1,6 +1,8 @@
 package com.app.drones.controller;
 
 import com.app.drones.exception.ResourceNotFoundException;
+import com.app.drones.interfaces.IDroneService;
+import com.app.drones.interfaces.IMedicationService;
 import com.app.drones.model.Drone;
 import com.app.drones.model.Medication;
 import com.app.drones.service.DroneService;
@@ -20,10 +22,10 @@ import java.util.Set;
 public class DroneController {
 
     @Autowired
-    private final DroneService droneService;
+    private final IDroneService droneService;
 
     @Autowired
-    private final MedicationService medicationService;
+    private final IMedicationService medicationService;
 
     public DroneController(DroneService droneService, MedicationService medicationService) {
         this.droneService = droneService;
