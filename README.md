@@ -12,13 +12,13 @@ Useful drone functions include delivery of small items that are (urgently) neede
 - Check loaded medication items for a given drone
 - Check available drones for loading
 - Check drone battery level for a given drone
-- Generate history/audit event log of drones battery levels periodically.
+- Generate history/audit event log of drones battery levels periodically (Every 30 seconds by default).
 
 ## Installation
 
 ### Requirements
 
-- [JDK 1.8](https://www.oracle.com/java/technologies/downloads/#java17) or later
+- [JDK 1.8](https://www.oracle.com/java/technologies/downloads) or later
 - [Maven 3.2+](https://maven.apache.org/download.cgi)
 - You can also inport the project into you IDE
 
