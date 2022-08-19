@@ -27,7 +27,7 @@ public class DroneController {
     @Autowired
     private final IMedicationService medicationService;
 
-    public DroneController(DroneService droneService, MedicationService medicationService) {
+    public DroneController(IDroneService droneService, IMedicationService medicationService) {
         this.droneService = droneService;
         this.medicationService = medicationService;
     }

@@ -7,9 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DronesApplicationTests {
 
-	@Test
-	void contextLoads() {
-		assertTrue(true);
-	}
+//	@Test
+//	void contextLoads() {
+//	}
 
 }

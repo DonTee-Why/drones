@@ -9,7 +9,7 @@ class MedicationTest {
 
     @Test
     @DisplayName(value = "Create New Medication")
-    void CreateNewDrone(){
+    void createNewDrone(){
         Medication medication = new Medication();
         medication.setId(Long.valueOf(1));
         medication.setName("Medication1");

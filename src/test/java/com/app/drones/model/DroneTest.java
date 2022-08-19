@@ -11,7 +11,7 @@ class DroneTest {
 
     @Test
     @DisplayName(value = "Create New Drone")
-    void CreateNewDrone(){
+    void createNewDrone(){
         Drone drone = new Drone();
         Medication medication = new Medication();
 //        medication.setId(UUID.randomUUID().);
